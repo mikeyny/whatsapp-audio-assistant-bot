@@ -36,15 +36,15 @@ client.on('message', async msg => {
     if (msg.hasMedia && (msg.type === MessageTypes.AUDIO || msg.type === MessageTypes.VOICE)) {
         try {
             const media = await msg.downloadMedia();
-            // get audio transcription
+            // Get audio transcription
             const transcription = await transcribeAudio(media.data);
             if (transcription) {
-                // get chatgpt response
+                // Get ChatGPT response
                 const chatGPTResponse = await getChatGPTResponse(transcription);
-                // convert the response from text to speech
+                // Convert the response from text to speech
                 const audioPath = await convertTextToSpeech(chatGPTResponse);
                 if (audioPath) {
-                    // send audio back
+                    // Send audio back
                     const audioMedia = await MessageMedia.fromFilePath(audioPath);
                     client.sendMessage(msg.from, audioMedia);
                 } else {
@@ -52,7 +52,7 @@ client.on('message', async msg => {
                 }
             }
         } catch (error) {
-            // handle error
+            // Handle error
             console.error('Error processing message:', error);
             client.sendMessage(msg.from, 'Sorry, an error occurred.');
         }
